@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>بصمة نجاح</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = { theme: { extend: { colors: { brand: {500:'#22c55e',600:'#16a34a'} }, fontFamily: { cairo: ['Cairo','sans-serif'] } } } }
+    </script>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Cairo', sans-serif; }
+        .modal-hidden { display: none; }
+        .message-user { background: #16a34a; color: white; padding: 8px 12px; border-radius: 12px 12px 0 12px; margin-right: auto; max-width: 85%; }
+        .message-ai { background: #f1f5f9; color: #1e293b; padding: 8px 12px; border-radius: 12px 12px 12px 0; margin-left: auto; max-width: 85%; }
+    </style>
+</head>
+<body class="bg-slate-100 min-h-screen pb-20">
+
+    <header class="bg-white shadow-sm p-4 sticky top-0 z-40 flex items-center justify-between">
+        <div class="flex items-center gap-2">
+            <div class="w-10 h-10 bg-green-600 rounded-lg flex items-center justify-center text-white font-bold">ب</div>
+            <h1 class="font-bold text-lg">بصمة نجاح</h1>
+        </div>
+    </header>
+
+    <main class="p-4 max-w-lg mx-auto">
+        <div class="bg-white p-4 rounded-xl shadow-sm mb-4">
+            <h2 class="font-bold mb-2">أهلاً بك 👋</h2>
+            <p class="text-sm text-gray-600">اختر المرحلة الدراسية وابدأ التعلم.</p>
+        </div>
+        <button onclick="openModal('aiChatModal')" class="w-full bg-green-600 text-white p-4 rounded-xl shadow text-center font-bold">💬 المساعد الذكي</button>
+    </main>
+
+    <div id="aiChatModal" class="modal-hidden fixed inset-0 z-50 bg-black/50 flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl w-full max-w-lg shadow-xl flex flex-col" style="height: 80vh;">
+            <div class="flex justify-between p-4 border-b">
+                <h3 class="font-bold">المساعد الذكي</h3>
+                <button onclick="closeModal('aiChatModal')">✖</button>
+            </div>
+            <div id="chatMessages" class="flex-1 p-4 overflow-y-auto space-y-3 flex flex-col">
+                <div class="message-ai">مرحباً! كيف أقدر أساعدك اليوم؟</div>
+            </div>
+            <div class="p-4 border-t flex gap-2">
+                <input id="chatInput" type="text" placeholder="اكتب سؤالك..." class="flex-1 border rounded-lg px-3 py-2 text-sm" onkeypress="if(event.key==='Enter') sendMessage()">
+                <button onclick="sendMessage()" class="bg-green-600 text-white px-4 py-2 rounded-lg">إرسال</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function openModal(id) { document.getElementById(id).classList.remove('modal-hidden'); }
+        function closeModal(id) { document.getElementById(id).classList.add('modal-hidden'); }
+        
+        async function sendMessage() {
+            const input = document.getElementById('chatInput');
+            const msg = input.value.trim();
+            if(!msg) return;
+            
+            const chatBox = document.getElementById('chatMessages');
+            chatBox.innerHTML += `<div class="message-user">${msg}</div>`;
+            input.value = '';
+            
+            try {
+                const res = await fetch('/api', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ message: msg })
+                });
+                const data = await res.json();
+                chatBox.innerHTML += `<div class="message-ai">${data.reply || 'عذراً، حدث خطأ.'}</div>`;
+            } catch (e) {
+                chatBox.innerHTML += `<div class="message-ai">⚠️ لا يمكن الاتصال بالخادم.</div>`;
+            }
+        }
+    </script>
+</body>
+</html>
