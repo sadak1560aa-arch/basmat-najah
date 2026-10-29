@@ -34,5 +34,5 @@ module.exports = async (req, res) => {
                                                                                                                                     console.error('API Error:', err);
                                                                                                                                         res.status(500).json({ error: err.message });
                                                                                                                                           }
-                                                                                                                                          };
+
 }
