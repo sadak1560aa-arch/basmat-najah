@@ -21,7 +21,7 @@ export default async function handler(req, res) {
         "X-Title": "Basmat Najah" // مطلوب من OpenRouter
       },
       body: JSON.stringify({
-        model: "google/gemini-2.0-flash-001", // اسم النموذج الصحيح والدقيق
+        model: "google/gemini-2.0-flash-exp:free",
         messages: [{ role: "user", content: message }]
       })
     });
