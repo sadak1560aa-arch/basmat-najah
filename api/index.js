@@ -21,7 +21,7 @@ export default async function handler(req, res) {
         "X-Title": "Basmat Najah" // مطلوب من OpenRouter
       },
       body: JSON.stringify({
-      model: "meta-llama/llama-3.3-70b-instruct:free",
+      model: "google/gemma-4-26b-a4b-it:free",
         messages: [{ role: "user", content: message }]
       })
     });
