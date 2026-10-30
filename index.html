@@ -69,7 +69,13 @@
                     body: JSON.stringify({ message: msg })
                 });
                 const data = await res.json();
-                chatBox.innerHTML += `<div class="message-ai">${data.reply || 'عذراً، حدث خطأ.'}</div>`;
+if (data.error) {
+    chatBox.innerHTML += `<div class="message-ai" style="color: red;">⚠️ خطأ: ${data.error}</div>`;
+} else {
+    chatBox.innerHTML += `<div class="message-ai">${data.reply || 'عذراً، حدث خطأ.'}</div>`;
+}
+                
+            
             } catch (e) {
                 chatBox.innerHTML += `<div class="message-ai">⚠️ لا يمكن الاتصال بالخادم.</div>`;
             }
